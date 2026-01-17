@@ -110,6 +110,101 @@ fisher install PatrickF1/fzf.fish
     sequence. Disable a command's binding by specifying its corresponding option with no value.
 ```
 
+## Habilitando a Interoperabilidade do WSL e Fish
+
+Para uma integração mais robusta entre o WSL e o Windows, como usar o navegador do Windows a partir do Fish, siga estes passos.
+
+### 1️⃣ Habilitar interoperabilidade do WSL
+
+No WSL, edite ou crie o arquivo `/etc/wsl.conf`:
+
+```bash
+sudo nano /etc/wsl.conf
+```
+
+Adicione o seguinte conteúdo:
+
+```
+[interop]
+enabled=true
+appendWindowsPath=true
+```
+
+### 2️⃣ Reiniciar o WSL
+
+No **PowerShell** ou **Prompt de Comando** do Windows, desligue o WSL para que as alterações sejam aplicadas:
+
+```powershell
+wsl --shutdown
+```
+
+Depois, abra o WSL novamente.
+
+### 3️⃣ Testar interop
+
+No terminal do WSL, verifique se a comunicação com o Windows está funcionando:
+
+```bash
+powershell.exe -c "echo OK"
+cmd.exe /c echo OK
+```
+
+### 4️⃣ Instalar wslview
+
+A ferramenta `wslview` permite abrir links e arquivos do WSL no Windows.
+
+Instale o pacote `wslu` que a contém:
+```bash
+sudo apt update
+sudo apt install wslu
+```
+
+Teste a instalação:
+
+```bash
+wslview https://www.google.com
+```
+
+### 5️⃣ Configurar Fish para usar navegador do Windows
+
+Edite o arquivo de configuração do Fish:
+
+```bash
+nano ~/.config/fish/config.fish
+```
+
+Adicione a seguinte linha para definir o `wslview` como o navegador padrão:
+
+```fish
+set -x BROWSER wslview
+```
+
+Recarregue a configuração:
+
+```fish
+source ~/.config/fish/config.fish
+```
+
+### 6️⃣ Testar Fish
+
+Execute o comando de configuração web do Fish para testar:
+
+```fish
+fish_config
+```
+
+Isso deve abrir a interface de configuração no seu navegador padrão do Windows.
+
+### 7️⃣ Diagnóstico rápido (opcional)
+
+Verifique o status da interoperabilidade:
+
+```bash
+cat /proc/sys/fs/binfmt_misc/WSLInterop
+```
+
+O resultado esperado é `enabled`.
+
 ## Conclusão
 
 Agora você tem um terminal poderoso e amigável com o Fish rodando no WSL. Explore os temas e plugins para personalizar a sua experiência!
